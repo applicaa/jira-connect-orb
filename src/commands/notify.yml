@@ -110,7 +110,7 @@ steps:
             ISSUE_KEYS=$(cat /tmp/job_info.json | jq '[.all_commit_details[].subject | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [.all_commit_details[].branch | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [if .branch then .branch else "" end | scan("(<<parameters.issue_regexp>>)")  | . [] ] + [if <<parameters.scan_commit_body>> then .all_commit_details[].body else "" end | scan("(<<parameters.issue_regexp>>)")   | .[] ]')
           else
             echo "${JIRA_KEYS}"
-            ISSUE_KEYS=$(echo '{"keys": "${JIRA_KEYS}"}' | jq '[.keys | scan("([A-Z]{2,30}-[0-9]+)") | .[] ]')
+            ISSUE_KEYS=$(echo '{"keys": \""${JIRA_KEYS}"\"}' | jq '[.keys | scan("([A-Z]{2,30}-[0-9]+)") | .[] ]')
             echo "ISSUE_KEYS"
             echo "${ISSUE_KEYS}"
             echo "${JIRA_KEYS}"
