@@ -1,0 +1,19 @@
+{
+	"builds": [
+    {
+      "schemaVersion": "1.0",
+      "pipelineId": "circleci-samples",
+      "buildNumber": 11,
+      "updateSequenceNumber": 0,
+      "displayName": "Build #1",
+      "description": "circleci-samples",
+      "label": "CircleCI",
+      "url": "https://circleci.com/workflow-run/f3ac82bf-4db4-468f-b019-44757256c115",
+      "state": "successful", 
+      "lastUpdated": "2019-03-24T23:27:25+00:00",
+      "issueKeys": [
+        "CC-19"
+      ]
+    }
+  ]
+}

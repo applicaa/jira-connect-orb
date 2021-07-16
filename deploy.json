@@ -1,0 +1,34 @@
+{
+  "deployments": [
+    {
+      "schemaVersion": "1.0",
+      "pipeline": {
+        "id": "f3ac82bf-4db4-468f-b019-44757256c113",
+        "displayName": "My Project",
+        "url": "https://circleci.com/workflow-run/f3ac82bf-4db4-468f-b019-44757256c113"
+      },
+      "deploymentSequenceNumber": 1,
+      "updateSequenceNumber": 1,
+      "displayName": "Deploy Dev",
+      "description": "Deploy Dev",
+      "url": "https://circleci.com/workflow-run/f3ac82bf-4db4-468f-b019-44757256c113",
+      "state": "successful", 
+      "lastUpdated": "2019-03-12T12:00:00-05:00",
+      "associations": [
+        {
+          "associationType": "issueKeys",
+          "values": ["CC-7"]
+        },
+        {
+          "associationType": "serviceIdOrKeys",
+          "values": ["b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlL2E1MDU4MjMyLTZmNzctMTFlYS1hOGRmLTBhNzdmM2Y0NTMwNC9hNTA1ZjljZS02Zjc3LTExZWEtYThlMC0wYTc3ZjNmNDUzMDQ="]
+        }
+      ],
+      "environment":{
+        "id": "dev-123",
+        "displayName": "Dev 123",
+        "type": "development"
+      }
+    }
+  ]
+}
