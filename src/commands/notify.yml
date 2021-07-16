@@ -104,12 +104,13 @@ steps:
         parse_jira_key_array () {
           # must save as ISSUE_KEYS='["CC-4"]'
 
-          if [ -z "<<parameters.jira_issue_keys>>" ]; then
+          if [ -z "${JIRA_KEYS}" ]; then
             fetch https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BUILD_NUM} /tmp/job_info.json
             # see https://jqplay.org/s/TNq7c5ctot
             ISSUE_KEYS=$(cat /tmp/job_info.json | jq '[.all_commit_details[].subject | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [.all_commit_details[].branch | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [if .branch then .branch else "" end | scan("(<<parameters.issue_regexp>>)")  | . [] ] + [if <<parameters.scan_commit_body>> then .all_commit_details[].body else "" end | scan("(<<parameters.issue_regexp>>)")   | .[] ]')
           else
-            ISSUE_KEYS=$(echo '{"keys": "<<parameters.jira_issue_keys>>"}' | jq '[.keys | scan("([A-Z]{2,30}-[0-9]+)") | .[] ]')
+            echo "${JIRA_KEYS}"
+            ISSUE_KEYS=$(echo '{"keys": "${JIRA_KEYS}"}' | jq '[.keys | scan("([A-Z]{2,30}-[0-9]+)") | .[] ]')
             echo "ISSUE_KEYS"
             echo "${ISSUE_KEYS}"
           fi
