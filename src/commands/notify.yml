@@ -131,7 +131,7 @@ steps:
           --arg repoName "${CIRCLE_PROJECT_REPONAME}" \
           --arg display "${CIRCLE_PROJECT_REPONAME}"  \
           --arg description "${CIRCLE_PROJECT_REPONAME} #${CIRCLE_BUILD_NUM} ${CIRCLE_JOB}" \
-          --argjson issueKeys "<<parameters.jira_issue_keys>>" \
+          --argjson issueKeys ["AAT-5671"] \
           '
           ($time_str | tonumber) as $time_num |
           {
