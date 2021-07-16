@@ -113,6 +113,7 @@ steps:
             ISSUE_KEYS=$(echo '{"keys": "${JIRA_KEYS}"}' | jq '[.keys | scan("([A-Z]{2,30}-[0-9]+)") | .[] ]')
             echo "ISSUE_KEYS"
             echo "${ISSUE_KEYS}"
+            echo "${JIRA_KEYS}"
           fi
 
           if [ -z "$ISSUE_KEYS" ]; then
