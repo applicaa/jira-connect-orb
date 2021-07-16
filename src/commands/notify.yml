@@ -69,16 +69,16 @@ steps:
           parse_jira_key_array
           HAS_JSD_SERVICE_ID="<< parameters.service_id >>"
             # If you have either an issue key or a service ID
-          if [[ -n "${ISSUE_KEYS}" || -n "${HAS_JSD_SERVICE_ID}" ]]; then
-            check_workflow_status
-            generate_json_payload_<<parameters.job_type>>
-            post_to_jira
-          else
-              # If no service is or issue key is found.
-            echo "No Jira issue keys found in commit subjects or branch name, skipping."
-            echo "No service ID selected. Please add the service_id parameter for JSD deployments."
-            exit 0
-          fi
+          # if [[ -n "${ISSUE_KEYS}" || -n "${HAS_JSD_SERVICE_ID}" ]]; then
+          #   check_workflow_status
+          #   generate_json_payload_<<parameters.job_type>>
+          #   post_to_jira
+          # else
+          #     # If no service is or issue key is found.
+          #   echo "No Jira issue keys found in commit subjects or branch name, skipping."
+          #   echo "No service ID selected. Please add the service_id parameter for JSD deployments."
+          #   exit 0
+          # fi
         }
 
         verify_api_key () {
@@ -105,8 +105,6 @@ steps:
           # must save as ISSUE_KEYS='["CC-4"]'
 
           JIRA_KEYS=$(cat /tmp/jira_keys)
-
-
           JSON_STRING=$( jq -n --arg keys "$JIRA_KEYS" '{keys: $keys}' )
 
           if [ -z "${JIRA_KEYS}" ]; then
