@@ -33,7 +33,10 @@ parameters:
     description: Whether or not to scan the Commit Body for the JIRA Issue Tag. Default is false.
     default: false
     type: boolean
-
+  manual_tag:
+    description: Manually set tag for the Jira issue, rather than scanning commit message. Useful when triggering this command via the API.
+    default: ""
+    type: string
 steps:
   - jq/install:
       when: always
