@@ -104,7 +104,7 @@ steps:
         parse_jira_key_array () {
           # must save as ISSUE_KEYS='["CC-4"]'
 
-          JIRA_KEYS=$(cat tmp/jira_keys)
+          JIRA_KEYS=$(cat /tmp/jira_keys)
 
           if [ -z "${JIRA_KEYS}" ]; then
             fetch https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BUILD_NUM} /tmp/job_info.json
