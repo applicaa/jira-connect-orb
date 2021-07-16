@@ -33,8 +33,8 @@ parameters:
     description: Whether or not to scan the Commit Body for the JIRA Issue Tag. Default is false.
     default: false
     type: boolean
-  manual_tag:
-    description: Manually set tag for the Jira issue, rather than scanning commit message. Useful when triggering this command via the API.
+  jira_issue_keys:
+    description: Manually set Jira issue keys
     default: ""
     type: string
 steps:
@@ -66,21 +66,13 @@ steps:
 
         run () {
           verify_api_key
-          parse_jira_key_array
+
           HAS_JSD_SERVICE_ID="<< parameters.service_id >>"
-            # If you have either an issue key or a service ID
-          if [[ -n "${ISSUE_KEYS}" || -n "${HAS_JSD_SERVICE_ID}" ]]; then
-            echo "$ISSUE_KEYS"
-            echo $ISSUE_KEYS
-            check_workflow_status
-            generate_json_payload_<<parameters.job_type>>
-            post_to_jira
-          else
-              # If no service is or issue key is found.
-            echo "No Jira issue keys found in commit subjects or branch name, skipping."
-            echo "No service ID selected. Please add the service_id parameter for JSD deployments."
-            exit 0
-          fi
+
+          check_workflow_status
+          generate_json_payload_<<parameters.job_type>>
+          post_to_jira
+
         }
 
         verify_api_key () {
@@ -100,21 +92,6 @@ steps:
             echo "Curl failed with code ${RESP}. full response below."
             cat $OFILE
             exit 1
-          fi
-        }
-
-        parse_jira_key_array () {
-          # Don't override ISSUE_KEYS if it's already set.
-          if [ -z "$ISSUE_KEYS" ]; then
-            # Must save as ISSUE_KEYS='["CC-4"]'
-            fetch https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BUILD_NUM} /tmp/job_info.json
-            # See https://jqplay.org/s/TNq7c5ctot
-            ISSUE_KEYS=$(cat /tmp/job_info.json | jq '[.all_commit_details[].subject | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [.all_commit_details[].branch | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [if .branch then .branch else "" end | scan("(<<parameters.issue_regexp>>)")  | . [] ] + [if <<parameters.scan_commit_body>> then .all_commit_details[].body else "" end | scan("(<<parameters.issue_regexp>>)")   | .[] ]')
-          fi
-          if [ -z "$ISSUE_KEYS" ]; then
-            # No issue keys found.
-            echo "No issue keys found. This build does not contain a match for a Jira Issue. Please add your issue ID to the commit message or within the branch name."
-            exit 0
           fi
         }
 
@@ -154,7 +131,7 @@ steps:
           --arg repoName "${CIRCLE_PROJECT_REPONAME}" \
           --arg display "${CIRCLE_PROJECT_REPONAME}"  \
           --arg description "${CIRCLE_PROJECT_REPONAME} #${CIRCLE_BUILD_NUM} ${CIRCLE_JOB}" \
-          --argjson issueKeys "${ISSUE_KEYS}" \
+          --argjson issueKeys "<<parameters.jira_issue_keys>>" \
           '
           ($time_str | tonumber) as $time_num |
           {
@@ -200,7 +177,7 @@ steps:
           --arg envId "${CIRCLE_WORKFLOW_ID}-<<parameters.environment>>" \
           --arg envName "<<parameters.environment>>" \
           --arg envType "<<parameters.environment_type>>" \
-          --argjson issueKeys "${ISSUE_KEYS}" \
+          --argjson issueKeys "<<parameters.jira_issue_keys>>" \
           '
           ($time_str | tonumber) as $time_num |
           {
