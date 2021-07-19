@@ -112,11 +112,8 @@ steps:
             # see https://jqplay.org/s/TNq7c5ctot
             ISSUE_KEYS=$(cat /tmp/job_info.json | jq '[.all_commit_details[].subject | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [.all_commit_details[].branch | scan("(<<parameters.issue_regexp>>)")   | .[] ] + [if .branch then .branch else "" end | scan("(<<parameters.issue_regexp>>)")  | . [] ] + [if <<parameters.scan_commit_body>> then .all_commit_details[].body else "" end | scan("(<<parameters.issue_regexp>>)")   | .[] ]')
           else
-            echo "${JSON_STRING}"
             ISSUE_KEYS=$(echo "${JSON_STRING}" | jq '[.keys | scan("([A-Z]{2,30}-[0-9]+)") | .[] ]')
-            echo "ISSUE_KEYS"
-            echo "${ISSUE_KEYS}"
-            echo "${JIRA_KEYS}"
+            echo "${KEYS}"
           fi
 
           if [ -z "$ISSUE_KEYS" ]; then
